@@ -125,7 +125,7 @@ class TaskController extends Controller
      
         $task    = Task::leftJoin('project', 'project.id', '=', 'task.project_id')->find($id);
          $status = $task->status;
-         $taskAssignedTo = TaskAssignedTo::leftJoin('net_hrd.employees', 'net_hrd.employees.id', '=', 'task_assigned_to.employees_id')->where('task_id', $id)->select('task_assigned_to.*', 'net_hrd.employees.fullname')->get();
+         $taskAssignedTo = TaskAssignedTo::leftJoin('net_hrd.employees', 'net_hrd.employees.id', '=', 'task_assigned_to.employees_id')->where('task_id', $id)->select('task_assigned_to.employees_id', 'net_hrd.employees.fullname')->get();
 
          $timesheets = [];
          foreach ($task->taskDoing($id, 500) as $key => $timesheet) {
