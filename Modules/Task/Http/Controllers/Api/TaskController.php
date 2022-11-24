@@ -123,7 +123,7 @@ class TaskController extends Controller
     public function show(Request $request, $id)
     {
      
-        $task    = Task::find($id);
+        $task    = Task::leftJoin('project', 'project.id', '=', 'task.project_id')->find($id);
          $status = $task->status;
          $taskAssignedTo = TaskAssignedTo::where('task_id', $id)->get();
 
