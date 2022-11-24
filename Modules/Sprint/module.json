@@ -1,0 +1,13 @@
+{
+    "name": "Sprint",
+    "alias": "sprint",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Sprint\\Providers\\SprintServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
