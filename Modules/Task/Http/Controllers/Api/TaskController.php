@@ -122,20 +122,21 @@ class TaskController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $employees = array(
-            105 => 'Mahrizal',
-            298 => 'Agus Susanto',
-            484 => 'Danti Iswandhari',
-            
-            500 =>  'Nafsirudin',
-            526 => 'Wahyu Nur Cahyo'
-         );
      
         $task    = Task::find($id);
          $status = $task->status;
          $taskAssignedTo = TaskAssignedTo::where('task_id', $id)->get();
+
+         $timesheets = [];
+         foreach ($task->taskDoing($id, 500) as $key => $timesheet) {
+            array_push($timesheets, $timesheet);
+         }
+
+         return response([
+            'status' => 200,
+            'data' => compact('task', 'taskAssignedTo', 'status', 'timesheets')
+         ]);
          
-        return view('task::show', compact('task', 'taskAssignedTo', 'status', 'employees'));
     }
 
     /**
