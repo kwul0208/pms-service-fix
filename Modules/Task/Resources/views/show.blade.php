@@ -154,6 +154,7 @@ active
       <td>:</td>
       <td>
           @foreach ($task->assignedTo as $assignedTo)
+          {{$assignedTo->employees}}
            <div> {{   $assignedTo->employees->fullname }} </div>
           @endforeach
       </td>
