@@ -2,12 +2,13 @@
 
 namespace Modules\Task\Http\Controllers\Api;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Modules\Task\Entities\Task;
-use Modules\Task\Entities\TaskAssignedTo;
+use Illuminate\Routing\Controller;
 use Modules\Project\Entities\Project;
+use Illuminate\Support\Facades\Validator;
+use Modules\Task\Entities\TaskAssignedTo;
+use Illuminate\Contracts\Support\Renderable;
 
 class TaskController extends Controller
 {
@@ -75,7 +76,7 @@ class TaskController extends Controller
 
         $task = new Task;
 
-#print_r($_POST);exit();
+        #print_r($_POST);exit();
         $task->task_name = $request->name;
         $task->description = $request->description;
         $task->status  = $request->status;
@@ -158,7 +159,48 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // return $request->employees_id;
+
+        $validator = Validator::make($request->all(), [
+            'task_name' => 'required|min:3',
+            'category' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'status' => 422,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        
+        Task::where('id', $id)->update([
+            'task_name' => $request->task_name,
+            'description' => $request->description,
+            'project_id' => $request->project_id,
+            'category' => $request->category,
+            'status' => $request->status,
+            'start_date' => $request->start_date,
+            'due_date' => $request->due_date,
+        ]);
+
+        if ($request->change_assign == true) {
+            TaskAssignedTo::where('task_id', $id)->delete();
+
+            foreach($request->employees_id as $key => $employees_id):
+
+                $taskAssignedTo =  new TaskAssignedTo;
+                $taskAssignedTo->task_id = $id;
+                $taskAssignedTo->project_id = $request->project_id;
+                $taskAssignedTo->employees_id = $employees_id;
+                $taskAssignedTo->save();
+             endforeach;
+        }
+
+        return response([
+            'status' => 200,
+            'message' => 'success'
+        ]);
     }
 
     /**

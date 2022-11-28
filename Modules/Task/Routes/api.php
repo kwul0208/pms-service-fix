@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 Route::prefix('task')->group(function() {
     Route::post('/mytask/index/{status}', 'Api\MyTaskController@index');
     Route::post('/store', 'Api\TaskController@store');
+    Route::post('/update/{task_id}', 'Api\TaskController@update');
     Route::get('/{id}', 'Api\TaskController@show');
     
     // belum
