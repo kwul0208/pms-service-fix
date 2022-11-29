@@ -202,6 +202,31 @@ class TaskController extends Controller
             'message' => 'success'
         ]);
     }
+    public function quickUpdate(Request $request, $id)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'task_name' => 'required|min:3',
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'status' => 422,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        
+        Task::where('id', $id)->update([
+            'task_name' => $request->task_name,
+        ]);
+
+
+        return response([
+            'status' => 200,
+            'message' => 'success'
+        ]);
+    }
 
     /**
      * Remove the specified resource from storage.

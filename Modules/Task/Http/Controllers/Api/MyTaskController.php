@@ -25,18 +25,18 @@ class MyTaskController extends Controller
         $employeesId = $request->user_id;
         // return $employeesId;
 
-        $tasks = Task::select('task.*','task_assigned_to.*', 'project.*', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
+        $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
         ->join('project', 'project.id', '=', 'task.project_id')->where('employees_id', $employeesId)
         ->where('status', $status)->orderBy('task.id', 'DESC')->paginate(10);
 
         if($status == 'todo')
         {
-            $tasks = Task::select('task.*','task_assigned_to.*', 'project.*', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
+            $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
             ->leftJoin('project', 'project.id', '=', 'task.project_id')->where('employees_id', $employeesId)
             ->whereRaw("(status='ongoing' OR status='not_started')")
             ->orderBy('task.id', 'DESC')->paginate(10);  
         }else{
-            $tasks = Task::select('task.*','task_assigned_to.*', 'project.*', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
+            $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
             ->leftJoin('project', 'project.id', '=', 'task.project_id')->where('employees_id', $employeesId)
             ->where('status', $status)->orderBy('task.id', 'DESC')->paginate(10);
         }
