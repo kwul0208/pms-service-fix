@@ -202,6 +202,8 @@ class TaskController extends Controller
             'message' => 'success'
         ]);
     }
+
+    // update name task
     public function quickUpdate(Request $request, $id)
     {
 
@@ -227,6 +229,34 @@ class TaskController extends Controller
             'message' => 'success'
         ]);
     }
+
+    // update status task
+    public function statusUpdate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'status' => 422,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        
+        Task::where('id', $id)->update([
+            'status' => $request->status,
+        ]);
+
+
+        return response([
+            'status' => 200,
+            'message' => 'success'
+        ]);
+    }
+
+
 
     /**
      * Remove the specified resource from storage.

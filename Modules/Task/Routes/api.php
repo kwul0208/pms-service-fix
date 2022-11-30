@@ -18,6 +18,7 @@ Route::prefix('task')->group(function() {
     Route::post('/store', 'Api\TaskController@store');
     Route::post('/update/{task_id}', 'Api\TaskController@update');
     Route::post('/quickUpdate/{task_id}', 'Api\TaskController@quickUpdate');
+    Route::post('/statusUpdate/{task_id}', 'Api\TaskController@statusUpdate');
     Route::delete('/delete/{task_id}', 'Api\TaskController@destroy');
     Route::get('/{id}', 'Api\TaskController@show');
     
