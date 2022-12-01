@@ -24,7 +24,7 @@ class ProjectController extends Controller
                             ->leftJoin('task_doing', 'task.id', '=', 'task_doing.task_id')
                             ->leftJoin('net_hrd.employees', 'task_doing.employees_id', '=', 'employees.id')->orderBy('task_doing.created_at', 'DESC')
                             ->groupBy('project.id')
-                            ->select('project.id', 'project.name', 'project.description', 'task_doing.created_at AS last_update', 'employees.fullname AS update_by')->get();
+                            ->select('project.id', 'project.name', 'project.description', 'task_doing.created_at AS last_update', 'employees.fullname AS update_by')->paginate();
         }else{
             $projects  = Project::select('project.*')
                         ->join('task_assigned_to', 'project.id', '=', 'task_assigned_to.project_id')
