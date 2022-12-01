@@ -27,7 +27,8 @@ Route::get('/user/auth/{id}', function(Request $request, $id){
         298 => 'Agus Susanto',
         484 => 'Danti Iswandhari',       
         500 =>  'Nafsirudin',
-        526 => 'Wahyu Nur Cahyo'
+        526 => 'Wahyu Nur Cahyo',
+        575 => 'Ahmad Wahyu Awaludin'
      );
 
      $employees_id_array = array(
@@ -36,6 +37,7 @@ Route::get('/user/auth/{id}', function(Request $request, $id){
         484,    
         500,
         526,
+        575
      );
 //filter
      if(!in_array($id, $employees_id_array))
