@@ -17,3 +17,39 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/user/auth/{id}', function(Request $request, $id){
+    $employees = array(
+        105 => 'Mahrizal',
+        298 => 'Agus Susanto',
+        484 => 'Danti Iswandhari',       
+        500 =>  'Nafsirudin',
+        526 => 'Wahyu Nur Cahyo'
+     );
+
+     $employees_id_array = array(
+        105,
+        298,
+        484,    
+        500,
+        526,
+     );
+
+     if(!in_array($id, $employees_id_array))
+     {
+        return response([
+            'status' => 401,
+            'message' => "Sorry Bro, ente bukan termasuk tim Programmer"
+        ]);
+     }else{
+        return response([
+            'status' => 200,
+            'message' => 'success',
+            'data' => [
+                $employees[$id],
+                $id
+            ]
+        ]);
+     }
+    
+});
