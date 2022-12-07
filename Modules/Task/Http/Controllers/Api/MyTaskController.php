@@ -25,28 +25,29 @@ class MyTaskController extends Controller
         $employeesId = $request->user_id;
         // return $employeesId;
 
-        $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
-        ->join('project', 'project.id', '=', 'task.project_id')->where('employees_id', $employeesId)
-        ->where('status', $status)->orderBy('task.id', 'DESC')->paginate(10);
+        // $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
+        // ->join('project', 'project.id', '=', 'task.project_id')->where('employees_id', $employeesId)
+        // ->where('status', $status)->orderBy('task.id', 'DESC')->paginate(10);
 
-        if($status == 'todo')
+        if($status == 'all')
         {
             $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
             ->leftJoin('project', 'project.id', '=', 'task.project_id')->where('employees_id', $employeesId)
-            ->whereRaw("(status='ongoing' OR status='not_started')")
-            ->orderBy('task.id', 'DESC')->paginate(10);  
+            // ->where('status', 'not_started')
+            ->orderBy('task.id', 'DESC')->get();  
         }else{
             $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
             ->leftJoin('project', 'project.id', '=', 'task.project_id')->where('employees_id', $employeesId)
             ->where('status', $status)->orderBy('task.id', 'DESC')->paginate(10);
+            
+            $task['timespent'] = "";
+            foreach ($tasks as $task ) {
+                $timeduration =  Taskdoing::where('task_id', $task->task_id)->where('employees_id', $employeesId)->sum('timeduration');
+                // $task['timespent'] = $timeduration;
+                $task['timespent'] = gmdate("H:i:s", $timeduration);
+            }
         }
 
-        $task['timespent'] = "";
-        foreach ($tasks as $task ) {
-            $timeduration =  Taskdoing::where('task_id', $task->task_id)->where('employees_id', $employeesId)->sum('timeduration');
-            // $task['timespent'] = $timeduration;
-            $task['timespent'] = gmdate("H:i:s", $timeduration);
-        }
 
          return response([
             'status' => 200,
