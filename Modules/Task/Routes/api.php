@@ -21,6 +21,7 @@ Route::prefix('task')->group(function() {
     Route::post('/statusUpdate/{task_id}', 'Api\TaskController@statusUpdate');
     Route::delete('/delete/{task_id}', 'Api\TaskController@destroy');
     Route::get('/{id}', 'Api\TaskController@show');
+    Route::get('/task-doing/{task_id}/{emp_id}', 'Api\MyTaskController@getTaskDoing');
     
     // belum
     Route::get('/', 'TaskController@index');

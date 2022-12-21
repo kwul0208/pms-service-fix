@@ -55,6 +55,14 @@ class MyTaskController extends Controller
          ]);
     }
 
+    public function getTaskDoing($task_id, $employees_id){
+        $taskDoing =  TaskDoing::where('task_id', $task_id)->where('employees_id', $employees_id)->orderBy('date', 'DESC')->orderBy('timestart', 'DESC')->get();
+        return response([
+            'status' => 200,
+            'data' => $taskDoing
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      * @return Renderable
