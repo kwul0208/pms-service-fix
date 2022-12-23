@@ -22,6 +22,7 @@ Route::prefix('task')->group(function() {
     Route::delete('/delete/{task_id}', 'Api\TaskController@destroy');
     Route::get('/{id}', 'Api\TaskController@show');
     Route::get('/task-doing/{task_id}/{emp_id}', 'Api\MyTaskController@getTaskDoing');
+    Route::post('/task-doing/store', 'Api\MyTaskController@storeTaskDoing');
     
     // belum
     Route::get('/', 'TaskController@index');

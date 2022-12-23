@@ -11,6 +11,8 @@ use App\Models\Employees;
 use App\Models\Timesheet;
 use Modules\Project\Entities\Project;
 use App\Models\TimesheetProject;
+use Illuminate\Support\Facades\Validator;
+
 
 class MyTaskController extends Controller
 {
@@ -80,6 +82,44 @@ class MyTaskController extends Controller
     public function store(Request $request)
     {
         //
+    }
+
+    public function storeTaskDoing(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'date' => 'required',
+            'timestart' => 'required',
+            'timefinish' => 'required',
+            'description' => 'required',
+            'timeduration' => 'required',
+            'task_id' => 'required',
+            'employees_id' => 'required',
+        ]);
+        
+        if ($validator->fails()) {
+            return response([
+                'status' => 422,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $taskDoing  = new TaskDoing;
+        $taskDoing->date        = $request->date;
+        $taskDoing->timestart   = $request->timestart;
+        $taskDoing->timefinish  = $request->timefinish;
+        $taskDoing->description = $request->description;
+        $taskDoing->timeduration = $request->timeduration;
+        $taskDoing->task_id = $request->task_id;
+        $taskDoing->project_id = $request->project_id;
+        $taskDoing->employees_id = $request->employees_id;
+        $taskDoing->created_by   = $request->employees_id;
+        $taskDoing->created_at = date('Y-m-d H:i:s');
+
+        $taskDoing->save();
+        return response([
+            'status' => 200,
+        ]);
     }
 
     /**
