@@ -59,8 +59,13 @@ class MyTaskController extends Controller
 
     public function getTaskDoing($task_id, $employees_id){
         $taskDoing =  TaskDoing::where('task_id', $task_id)->where('employees_id', $employees_id)->orderBy('created_at', 'DESC')->orderBy('timestart', 'DESC')->get();
+
+        $timeduration =  Taskdoing::where('task_id', $task_id)->where('employees_id', $employees_id)->sum('timeduration');
+        $timespent= gmdate("H:i:s", $timeduration);
+
         return response([
             'status' => 200,
+            'time_duration' => $timespent,
             'data' => $taskDoing
         ]);
     }
