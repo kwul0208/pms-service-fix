@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Modules\Project\Http\Controllers\Api\ProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,7 @@ use Illuminate\Http\Request;
 Route::prefix('project')->group(function() {
     Route::post('/', 'Api\ProjectController@index');
 
-    Route::post('/all', 'Api\ProjectController@all');
+    Route::post('/all', [ProjectController::class, 'all']);
 
     Route::get('/{user_id}', 'Api\ProjectController@index');
     Route::post('/tasks-not-started', 'Api\TaskProjectController@tasksNotStarted');
