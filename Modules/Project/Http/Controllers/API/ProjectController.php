@@ -12,7 +12,7 @@ use Modules\Project\Entities\Project;
 class ProjectController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. x
      * @return Renderable
      */
     public function index(Request $request)
