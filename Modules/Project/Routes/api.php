@@ -28,11 +28,11 @@ Route::prefix('project')->group(function() {
     Route::post('/tasks-ongoing', 'Api\TaskProjectController@tasksOnGoing');
     Route::post('/tasks-done', 'Api\TaskProjectController@tasksDone');
     Route::post('/store', 'Api\ProjectController@store');
+    Route::post('/delete/{id}', 'Api\ProjectController@destroy');
     
     // belum
     Route::get('/{id}', 'Api\ProjectController@show');
     Route::post('/taskProject/store', 'TaskProjectController@store');
 
-    Route::get('/delete/{id}', 'Api\ProjectController@destroy');
     Route::get('/meeting/{id}', 'MeetingController@index');
 });

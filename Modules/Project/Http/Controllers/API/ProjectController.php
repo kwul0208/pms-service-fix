@@ -122,7 +122,7 @@ class ProjectController extends Controller
             \Log::error($th);
             return  response()->json([
                 'status' => 402,
-                'message' => "failed",
+                'message' => "failed! something wrong",
                 'error' => $th->getMessage(),
                 'line' => $th->getLine(),
                 'data' => []
@@ -148,26 +148,6 @@ class ProjectController extends Controller
         // return view('project::show', compact('project'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('project::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -175,20 +155,13 @@ class ProjectController extends Controller
      * @return Renderable
      */
     public function destroy($id)
-    {
-        //
+    { 
 
-        $project = Project::find($id);
-        $project_timesheet_id =  $project->project_timesheet_id;
+            Project::where(['id'=> $id])->delete();
 
-        // hapus project
-        $project = Project::find($id);
-        $project->delete();
+            return response([
+                'status' => 200
+            ]);
 
-        // hapus project timesheet
-        $projectTimesheet = ProjectTimesheet::find($project_timesheet_id);
-        $projectTimesheet->delete();
-
-        return redirect('project');
     }
 }
