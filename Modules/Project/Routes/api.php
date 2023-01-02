@@ -27,11 +27,10 @@ Route::prefix('project')->group(function() {
     Route::post('/tasks-not-started', 'Api\TaskProjectController@tasksNotStarted');
     Route::post('/tasks-ongoing', 'Api\TaskProjectController@tasksOnGoing');
     Route::post('/tasks-done', 'Api\TaskProjectController@tasksDone');
+    Route::post('/store', 'Api\ProjectController@store');
     
     // belum
     Route::get('/{id}', 'Api\ProjectController@show');
-    Route::get('/create', 'Api\ProjectController@create');
-    Route::post('/store', 'Api\ProjectController@store');
     Route::post('/taskProject/store', 'TaskProjectController@store');
 
     Route::get('/delete/{id}', 'Api\ProjectController@destroy');

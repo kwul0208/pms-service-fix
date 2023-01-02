@@ -2,12 +2,13 @@
 
 namespace Modules\Project\Http\Controllers\Api;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use App\Models\ProjectTimesheet;
-
+use Illuminate\Routing\Controller;
 use Modules\Project\Entities\Project;
+
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Support\Renderable;
 
 class ProjectController extends Controller
 {
@@ -68,39 +69,66 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $project = new Project;
-        $employeesId = $request->session()->get('employeesId');
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'description' => 'required',
+            'created_start_date' => 'required',
+            'employees_id' => 'required'
+        ]);
 
-        $project->name = $request->get('name');
-        $project->description = $request->get('description');
-        $project->created_start_date = $request->get('created_start_date');
-        $project->created_by = $employeesId;
-        $project->created_at = date('Y-m-d H:i:s');
+        if ($validator->fails()) {
+            return response([
+                'status' => 422,
+                'message' => $validator->errors()->first()
+            ]);
+        }
 
-        $project->save();
-        $project_id = $project->id;
+        try {
+            $project = new Project;
+            $employeesId = $request->employees_id;
 
-        //insert ke project timesheet
-        $projectTimesheet = new ProjectTimesheet;
-        $projectTimesheet->title = $request->get('name');
-        $projectTimesheet->description = $request->get('description');
-        $projectTimesheet->created_date = date('Y-m-d H:i:s');
-        $projectTimesheet->start_date = $request->get('created_start_date');
-        $projectTimesheet->status_date = date('Y-m-d H:i:s');
-        $projectTimesheet->created_by = $employeesId;
-        $projectTimesheet->it_project_management_id = $project_id;
-        $projectTimesheet->save();
+            $project->name = $request->name;
+            $project->description = $request->description;
+            $project->created_start_date = $request->created_start_date;
+            $project->created_by = $employeesId;
+            $project->created_at = date('Y-m-d H:i:s');
 
-        $projectTimesheetId = $projectTimesheet->id;
+            $project->save();
+            $project_id = $project->id;
 
-        $project = Project::find($project_id);
-        $project->project_timesheet_id = $projectTimesheetId;
-          $project->save();
-    
+            //insert ke project timesheet
+            $projectTimesheet = new ProjectTimesheet;
+            $projectTimesheet->title = $request->name;
+            $projectTimesheet->description = $request->description;
+            $projectTimesheet->created_date = date('Y-m-d H:i:s');
+            $projectTimesheet->start_date = $request->created_start_date;
+            $projectTimesheet->status_date = date('Y-m-d H:i:s');
+            $projectTimesheet->created_by = $employeesId;
+            $projectTimesheet->it_project_management_id = $project_id;
+            $projectTimesheet->save();
 
-        return redirect('project/'.$project_id);
-       // print_r($_POST);
+            $projectTimesheetId = $projectTimesheet->id;
+
+            $project = Project::find($project_id);
+            $project->project_timesheet_id = $projectTimesheetId;
+            $project->save();
+
+            return response([
+                'status' => 200,
+                'message' => 'sucess'
+            ]);
+
+        } catch (\Throwable $th) {
+            \Log::error($th);
+            return  response()->json([
+                'status' => 402,
+                'message' => "failed",
+                'error' => $th->getMessage(),
+                'line' => $th->getLine(),
+                'data' => []
+            ]);
+        }
+ 
     }
 
     /**
