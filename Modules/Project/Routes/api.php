@@ -29,9 +29,9 @@ Route::prefix('project')->group(function() {
     Route::post('/tasks-done', 'Api\TaskProjectController@tasksDone');
     Route::post('/store', 'Api\ProjectController@store');
     Route::delete('/delete/{id}', 'Api\ProjectController@destroy');
+    Route::get('/detail/{id}', 'Api\ProjectController@show');
     
     // belum
-    Route::get('/{id}', 'Api\ProjectController@show');
     Route::post('/taskProject/store', 'TaskProjectController@store');
 
     Route::get('/meeting/{id}', 'MeetingController@index');

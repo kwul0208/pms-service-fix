@@ -33,10 +33,18 @@ class MyTaskController extends Controller
 
         if($status == 'all')
         {
-            $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
-            ->leftJoin('project', 'project.id', '=', 'task.project_id')->where('employees_id', $employeesId)
-            // ->where('status', 'not_started')
-            ->orderBy('task.id', 'DESC')->get();  
+            if($request->project_id == null){
+                $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
+                ->leftJoin('project', 'project.id', '=', 'task.project_id')->where('employees_id', $employeesId)
+                // ->where('status', 'not_started')
+                ->orderBy('task.id', 'DESC')->get();  
+            } else{
+                $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
+                ->leftJoin('project', 'project.id', '=', 'task.project_id')
+                ->where('employees_id', $employeesId)
+                ->where('project.id', $request->project_id)
+                ->orderBy('task.id', 'DESC')->get();
+            }
         }else{
             $tasks = Task::select('task.*','task_assigned_to.*', 'project.id', 'project.name', 'project.project_timesheet_id', 'task.description AS task_description')->leftJoin('task_assigned_to', 'task.id', '=', 'task_assigned_to.task_id')
             ->leftJoin('project', 'project.id', '=', 'task.project_id')->where('employees_id', $employeesId)
