@@ -9,6 +9,7 @@ class MeetingCormet extends Model
 {
     
         use HasFactory;
+        public $connection = "cormet";
         protected $table = "cormet.cormet";
         protected $primarykey = "id";
         public $timestamps   = FALSE;

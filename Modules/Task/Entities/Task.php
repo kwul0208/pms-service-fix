@@ -8,6 +8,7 @@ use Modules\Task\Entities\TaskDoing;
 
 class Task extends Model
 {
+    public $connection = "mysql";
     protected $fillable = [];
     protected $table = "task";
     protected $primarykey = "id";

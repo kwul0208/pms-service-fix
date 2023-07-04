@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Employees extends Model
 {
     use HasFactory;
+    public $connection = "hrd";
     protected $table = "net_hrd.employees";
     protected $primarykey = "id";
 }

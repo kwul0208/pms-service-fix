@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Timesheet extends Model
 {
     use HasFactory;
+    public $connection = "muc";
     protected $table = "net_muc.timesheet";
     protected $primarykey = "id";
     public $timestamps   = FALSE;

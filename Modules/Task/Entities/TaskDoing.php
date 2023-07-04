@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TaskDoing extends Model
 {
+    public $connection = "mysql";
     protected $fillable   = [];
     protected $table      = "task_doing";
     protected $primarykey = "id";
