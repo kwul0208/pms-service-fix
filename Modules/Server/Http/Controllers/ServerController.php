@@ -2,6 +2,8 @@
 
 namespace Modules\Server\Http\Controllers;
 
+use App\Models\Employees;
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -101,7 +103,7 @@ class ServerController extends Controller
     public function show($id)
     {
         try {
-            $data = ServerModel::with('employees')
+            $data = ServerModel::with('employee' , 'employees.employees_detail')
             ->where('id', $id)
             ->first();
 
