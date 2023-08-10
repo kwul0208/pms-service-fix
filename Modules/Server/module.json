@@ -1,0 +1,13 @@
+{
+    "name": "Server",
+    "alias": "server",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Server\\Providers\\ServerServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
