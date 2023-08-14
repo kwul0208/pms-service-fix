@@ -11,4 +11,9 @@ class Employees extends Model
     public $connection = "hrd";
     protected $table = "net_hrd.employees";
     protected $primarykey = "id";
+
+
+    protected $hidden = [
+        'password',
+    ];
 }

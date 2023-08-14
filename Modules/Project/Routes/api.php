@@ -30,6 +30,7 @@ Route::prefix('project')->group(function() {
     Route::post('/store', 'Api\ProjectController@store');
     Route::delete('/delete/{id}', 'Api\ProjectController@destroy');
     Route::get('/detail/{id}', 'Api\ProjectController@show');
+    Route::get('/detail-new/{id}', 'Api\ProjectController@detailNew');
     
     // belum
     Route::post('/taskProject/store', 'TaskProjectController@store');

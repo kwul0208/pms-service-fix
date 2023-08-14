@@ -4,5 +4,6 @@
     "Timesheet": true,
     "Task": true,
     "Sprint": true,
-    "Server": true
+    "Server": true,
+    "Teams": true
 }

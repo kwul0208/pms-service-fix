@@ -164,4 +164,21 @@ class ProjectController extends Controller
             ]);
 
     }
+
+    public function detailNew($id){
+        try {
+            $data = Project::where('id', $id)->with('pic', 'teams.employee', 'servers.server')->first();
+
+            return response([
+                'status' => 200,
+                'message' => 'success',
+                'data' => $data
+            ]);
+        } catch (\Throwable $th) {
+            return response([
+                'status' => 500,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
 }
