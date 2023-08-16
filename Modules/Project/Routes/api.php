@@ -31,6 +31,7 @@ Route::prefix('project')->group(function() {
     Route::delete('/delete/{id}', 'Api\ProjectController@destroy');
     Route::get('/detail/{id}', 'Api\ProjectController@show');
     Route::get('/detail-new/{id}', 'Api\ProjectController@detailNew');
+    Route::post('/update', 'Api\ProjectController@updateProject');
     
     // belum
     Route::post('/taskProject/store', 'TaskProjectController@store');

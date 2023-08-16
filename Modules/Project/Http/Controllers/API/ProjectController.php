@@ -4,11 +4,14 @@ namespace Modules\Project\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\ProjectTimesheet;
+use Carbon\Carbon;
 use Illuminate\Routing\Controller;
 use Modules\Project\Entities\Project;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Support\Renderable;
+use Modules\Server\Entities\ProjectServerModel;
+use Modules\Teams\Entities\TeamsModel;
 
 class ProjectController extends Controller
 {
@@ -107,6 +110,8 @@ class ProjectController extends Controller
             $projectTimesheet->it_project_management_id = $project_id;
             $projectTimesheet->save();
 
+
+
             $projectTimesheetId = $projectTimesheet->id;
 
             $project = Project::find($project_id);
@@ -175,6 +180,70 @@ class ProjectController extends Controller
                 'data' => $data
             ]);
         } catch (\Throwable $th) {
+            return response([
+                'status' => 500,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function updateProject(Request $request){
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'name' => 'required',
+            'desc' => 'required',
+            'created_start_date' => 'required',
+            'pic' => 'required',
+            'change_server' => 'required',
+            'change_teams' => 'required',
+            'created_by' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response([
+                'status' => 422,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        try{
+            Project::where('id', $request->id)->update([
+                'name' => $request->name,
+                'description' => $request->desc,
+                'created_start_date' => $request->created_start_date,
+                'pic' => $request->pic
+            ]);
+
+            // -- cek apakah ada request untuk perubahan server
+            if($request->change_server == true){
+                ProjectServerModel::where('project_id', $request->id)->delete();
+                for ($i=0; $i < count($request->server_ids); $i++) { 
+                    ProjectServerModel::create([
+                        'project_id' => $request->id,
+                        'server_id' => $request->server_ids[$i],
+                    ]);
+                }
+            }
+
+            // -- cek apakah ada request untuk perubahan server
+            if($request->change_teams == true){
+                TeamsModel::where('project_id', $request->id)->delete();
+                for ($i=0; $i < count($request->team_ids); $i++) { 
+                    TeamsModel::create([
+                        'project_id' => $request->id,
+                        'employees_id' => $request->team_ids[$i],
+                        'join_date' => Carbon::now(),
+                        'created_by' => $request->created_by
+                    ]);
+                }
+            }
+
+            return response([
+                'status' => 200,
+                'message' => 'success'
+            ]);
+
+        }catch(\Throwable $th){
             return response([
                 'status' => 500,
                 'message' => $th->getMessage()
